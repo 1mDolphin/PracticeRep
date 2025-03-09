@@ -1,40 +1,8 @@
-const { DataTypes, Sequelize } = require('sequelize');
+const { UserModel, sequelize } = require('./seed.js');
 
 const express = require('express');
 const app = express();
 app.use(express.json())
-
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite'
-})
-
-const roles = ['user', 'admin', 'superadmin']
-const UserModel = sequelize.define('User', {
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
-    },
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    role: {
-        type: DataTypes.ENUM(roles),
-        defaultValue: 'user'
-    }
-})
 
 const initialize = async () => {
     await sequelize.sync({ force: false})

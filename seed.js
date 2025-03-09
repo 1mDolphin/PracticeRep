@@ -4,7 +4,7 @@ const sequelize = new Sequelize({
     storage: './database.sqlite'
 });
 
-const roles = ['user', 'admin', 'superadmin'];
+const roles = ['user', 'admin', 'superadmin', 'moderator'];
 
 const UserModel = sequelize.define('User', {
     id: {
@@ -33,7 +33,7 @@ const UserModel = sequelize.define('User', {
 });
 
 const initialize = async () => {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
 
     await UserModel.bulkCreate([
         {
@@ -53,6 +53,12 @@ const initialize = async () => {
             email: 'superadmin1@example.com',
             password: 'password3',
             role: 'superadmin'
+        },
+        {
+            username: 'moderator1',
+            email: 'moderator1@example.com',
+            password: 'password3',
+            role: 'moderator'
         }
     ]);
 
@@ -62,3 +68,5 @@ const initialize = async () => {
 initialize().catch(error => {
     console.error('Error initializing database:', error);
 });
+
+module.exports = { UserModel, sequelize };
